@@ -432,7 +432,20 @@ def cancel_booking(booking_id):
 
     return redirect(url_for("bookings"))
 
+@app.route("/debug")
+def debug():
 
+    return f"""
+    <h2>Session Debug</h2>
+
+    <p>Customer ID: {session.get("customer_id")}</p>
+
+    <p>Customer Name: {session.get("customer_name")}</p>
+
+    <p>
+        <a href="/bookings">My Bookings</a>
+    </p>
+    """
 # ==================================================
 # LOGOUT
 # ==================================================

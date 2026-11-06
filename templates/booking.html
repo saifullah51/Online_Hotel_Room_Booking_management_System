@@ -1,180 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Bookings | Grand Stay Hotel</title>
+    <title>Book Room | Hotel Management System</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
+        body {
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        /* Navbar */
+        nav {
+            background: #1f2937;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #f59e0b;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav ul li a:hover {
+            color: #f59e0b;
+        }
+
+        /* Main */
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 50px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+        }
+
+        /* Room Information */
+        .room-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .room-card h2 {
+            color: #1f2937;
+            margin-bottom: 20px;
+        }
+
+        .room-info {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        .room-info strong {
+            color: #111827;
+        }
+
+        .price {
+            font-size: 25px;
+            color: #f59e0b;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* Booking Form */
+        .booking-form {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .booking-form h2 {
+            color: #1f2937;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f59e0b;
+        }
+
+        .book-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            background: #f59e0b;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .book-btn:hover {
+            background: #d97706;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #374151;
+        }
+
+        .back-btn:hover {
+            color: #f59e0b;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-
-<nav class="navbar">
-
+<!-- Navbar -->
+<nav>
     <div class="logo">
-        🏨 Grand Stay
+        Hotel <span>Management</span>
     </div>
 
-    <div class="nav-links">
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/rooms">Rooms</a></li>
+        <li><a href="/bookings">My Bookings</a></li>
 
-        <a href="/">Home</a>
-
-        <a href="/rooms">Rooms</a>
-
-        <a href="/bookings">My Bookings</a>
-
-        <a href="/logout">Logout</a>
-
-    </div>
-
+        {% if session.get('customer_id') %}
+            <li><a href="/logout">Logout</a></li>
+        {% else %}
+            <li><a href="/login">Login</a></li>
+        {% endif %}
+    </ul>
 </nav>
 
 
-<!-- BOOKINGS -->
+<!-- Main Container -->
+<div class="container">
 
-<section class="rooms-section">
+    <!-- Room Details -->
+    <div class="room-card">
 
-    <h1>
-        My Bookings
-    </h1>
+        <h2>Room Details</h2>
 
-    <p class="rooms-subtitle">
-        View your hotel reservations
-    </p>
-
-
-    {% if bookings %}
-
-        <div class="room-container">
-
-            {% for booking in bookings %}
-
-                <div class="room-card">
-
-                    <div class="room-icon">
-                        🏨
-                    </div>
-
-                    <h2>
-                        Room {{ booking.room_number }}
-                    </h2>
-
-                    <p>
-                        <strong>Booking ID:</strong>
-                        {{ booking.booking_id }}
-                    </p>
-
-                    <p>
-                        <strong>Room Type:</strong>
-                        {{ booking.room_type }}
-                    </p>
-
-                    <p>
-                        <strong>Check-in:</strong>
-                        {{ booking.check_in }}
-                    </p>
-
-                    <p>
-                        <strong>Check-out:</strong>
-                        {{ booking.check_out }}
-                    </p>
-
-                    <p>
-                        <strong>Total Amount:</strong>
-                        ₹{{ booking.total_amount }}
-                    </p>
-
-                    <p>
-                        <strong>Status:</strong>
-
-                        {% if booking.status == "Confirmed" %}
-
-                            <span style="color: green; font-weight: bold;">
-                                ✓ Confirmed
-                            </span>
-
-                        {% elif booking.status == "Cancelled" %}
-
-                            <span style="color: red; font-weight: bold;">
-                                ✗ Cancelled
-                            </span>
-
-                        {% else %}
-
-                            {{ booking.status }}
-
-                        {% endif %}
-
-                    </p>
-
-
-                    {% if booking.status == "Confirmed" %}
-
-                        <a href="/cancel-booking/{{ booking.booking_id }}"
-                           class="book-btn"
-                           onclick="return confirm('Are you sure you want to cancel this booking?')">
-
-                            Cancel Booking
-
-                        </a>
-
-                    {% endif %}
-
-                </div>
-
-            {% endfor %}
-
+        <div class="room-info">
+            <strong>Room Number:</strong>
+            {{ room.room_number }}
         </div>
 
-    {% else %}
+        <div class="room-info">
+            <strong>Room Type:</strong>
+            {{ room.room_type }}
+        </div>
 
-        <div class="form-box"
-             style="margin: 30px auto;">
+        <div class="room-info">
+            <strong>Capacity:</strong>
+            {{ room.capacity }} Persons
+        </div>
 
-            <div class="room-icon">
-                🛏️
+        <div class="room-info">
+            <strong>Status:</strong>
+            {{ room.status }}
+        </div>
+
+        <div class="price">
+            ₹{{ room.price }} / Night
+        </div>
+
+        <a href="/rooms" class="back-btn">
+            ← Back to Rooms
+        </a>
+
+    </div>
+
+
+    <!-- Booking Form -->
+    <div class="booking-form">
+
+        <h2>Book This Room</h2>
+
+        <form method="POST" action="">
+
+            <div class="form-group">
+                <label for="check_in">
+                    Check-in Date
+                </label>
+
+                <input
+                    type="date"
+                    id="check_in"
+                    name="check_in"
+                    required
+                >
             </div>
 
-            <h2>
-                No Bookings Found
-            </h2>
 
-            <p>
-                You have not made any bookings yet.
-            </p>
+            <div class="form-group">
+                <label for="check_out">
+                    Check-out Date
+                </label>
 
-            <a href="/rooms" class="book-btn">
-                Browse Rooms
-            </a>
-
-        </div>
-
-    {% endif %}
-
-</section>
+                <input
+                    type="date"
+                    id="check_out"
+                    name="check_out"
+                    required
+                >
+            </div>
 
 
-<!-- FOOTER -->
+            <button type="submit" class="book-btn">
+                Confirm Booking
+            </button>
 
-<footer>
+        </form>
 
-    <p>
-        © 2026 Grand Stay Hotel |
-        Online Hotel Management System
-    </p>
+    </div>
 
-</footer>
+</div>
 
+
+<script>
+    // Prevent selecting past dates
+    const today = new Date().toISOString().split("T")[0];
+
+    document.getElementById("check_in").min = today;
+    document.getElementById("check_out").min = today;
+
+    // Check-out must be after check-in
+    document.getElementById("check_in").addEventListener("change", function () {
+
+        document.getElementById("check_out").min = this.value;
+
+    });
+</script>
 
 </body>
-
 </html>

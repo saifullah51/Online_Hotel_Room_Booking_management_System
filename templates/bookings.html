@@ -1,180 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | Hotel Management System</title>
 
-    <title>My Bookings | Grand Stay Hotel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
+        body {
+            background: #f4f6f9;
+            color: #333;
+        }
 
+        /* Navbar */
+        nav {
+            background: #1f2937;
+            color: white;
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #f59e0b;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        nav ul li a:hover {
+            color: #f59e0b;
+        }
+
+        /* Main */
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .page-title h1 {
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .page-title p {
+            color: #6b7280;
+        }
+
+        /* Booking Card */
+        .booking-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 20px;
+            align-items: center;
+        }
+
+        .booking-item {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .booking-item .label {
+            font-size: 12px;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .booking-item .value {
+            font-size: 15px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .amount {
+            color: #f59e0b !important;
+            font-size: 17px !important;
+        }
+
+        /* Status */
+        .status {
+            display: inline-block;
+            width: fit-content;
+            padding: 7px 13px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .confirmed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Cancel Button */
+        .cancel-btn {
+            display: inline-block;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .cancel-btn:hover {
+            background: #b91c1c;
+        }
+
+        .disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        /* No bookings */
+        .no-bookings {
+            background: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .no-bookings h2 {
+            color: #374151;
+            margin-bottom: 15px;
+        }
+
+        .no-bookings p {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .rooms-btn {
+            display: inline-block;
+            background: #f59e0b;
+            color: white;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+
+        .rooms-btn:hover {
+            background: #d97706;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .booking-card {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .booking-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
-
-<nav class="navbar">
+<!-- Navbar -->
+<nav>
 
     <div class="logo">
-        🏨 Grand Stay
+        Hotel <span>Management</span>
     </div>
 
-    <div class="nav-links">
+    <ul>
+        <li>
+            <a href="/">Home</a>
+        </li>
 
-        <a href="/">Home</a>
+        <li>
+            <a href="/rooms">Rooms</a>
+        </li>
 
-        <a href="/rooms">Rooms</a>
+        <li>
+            <a href="/bookings">My Bookings</a>
+        </li>
 
-        <a href="/bookings">My Bookings</a>
-
-        <a href="/logout">Logout</a>
-
-    </div>
+        {% if session.get('customer_id') %}
+            <li>
+                <a href="/logout">Logout</a>
+            </li>
+        {% else %}
+            <li>
+                <a href="/login">Login</a>
+            </li>
+        {% endif %}
+    </ul>
 
 </nav>
 
 
-<!-- ================= MY BOOKINGS ================= -->
+<!-- Main Content -->
+<div class="container">
 
-<section class="rooms-section">
+    <div class="page-title">
+        <h1>My Bookings</h1>
 
-    <h1>
-        My Bookings
-    </h1>
-
-    <p class="rooms-subtitle">
-        View your hotel reservations
-    </p>
+        {% if session.get('customer_name') %}
+            <p>
+                Welcome, {{ session.get('customer_name') }}
+            </p>
+        {% else %}
+            <p>
+                View and manage your hotel reservations
+            </p>
+        {% endif %}
+    </div>
 
 
     {% if bookings %}
 
-        <div class="room-container">
+        {% for booking in bookings %}
 
-            {% for booking in bookings %}
+        <div class="booking-card">
 
-                <div class="room-card">
+            <!-- Booking ID -->
+            <div class="booking-item">
+                <span class="label">
+                    Booking ID
+                </span>
 
-                    <div class="room-icon">
-                        🏨
-                    </div>
+                <span class="value">
+                    #{{ booking.booking_id }}
+                </span>
+            </div>
 
-                    <h2>
-                        Room {{ booking.room_number }}
-                    </h2>
 
-                    <p>
-                        <strong>Booking ID:</strong>
-                        {{ booking.booking_id }}
-                    </p>
+            <!-- Room Number -->
+            <div class="booking-item">
+                <span class="label">
+                    Room
+                </span>
 
-                    <p>
-                        <strong>Room Type:</strong>
-                        {{ booking.room_type }}
-                    </p>
+                <span class="value">
+                    {{ booking.room_number }}
+                </span>
+            </div>
 
-                    <p>
-                        <strong>Check-in:</strong>
-                        {{ booking.check_in }}
-                    </p>
 
-                    <p>
-                        <strong>Check-out:</strong>
-                        {{ booking.check_out }}
-                    </p>
+            <!-- Room Type -->
+            <div class="booking-item">
+                <span class="label">
+                    Room Type
+                </span>
 
-                    <p>
-                        <strong>Total Amount:</strong>
-                        ₹{{ booking.total_amount }}
-                    </p>
+                <span class="value">
+                    {{ booking.room_type }}
+                </span>
+            </div>
 
-                    <p>
-                        <strong>Status:</strong>
 
-                        {% if booking.status == "Confirmed" %}
+            <!-- Check In -->
+            <div class="booking-item">
+                <span class="label">
+                    Check-in
+                </span>
 
-                            <span style="color: green; font-weight: bold;">
-                                ✓ Confirmed
-                            </span>
+                <span class="value">
+                    {{ booking.check_in }}
+                </span>
+            </div>
 
-                        {% elif booking.status == "Cancelled" %}
 
-                            <span style="color: red; font-weight: bold;">
-                                ✗ Cancelled
-                            </span>
+            <!-- Check Out -->
+            <div class="booking-item">
+                <span class="label">
+                    Check-out
+                </span>
 
-                        {% else %}
+                <span class="value">
+                    {{ booking.check_out }}
+                </span>
+            </div>
 
-                            {{ booking.status }}
 
-                        {% endif %}
+            <!-- Amount -->
+            <div class="booking-item">
+                <span class="label">
+                    Total Amount
+                </span>
 
-                    </p>
+                <span class="value amount">
+                    ₹{{ booking.total_amount }}
+                </span>
+            </div>
 
+
+            <!-- Status -->
+            <div class="booking-item">
+                <span class="label">
+                    Status
+                </span>
+
+                <span class="value">
 
                     {% if booking.status == "Confirmed" %}
 
-                        <a href="/cancel-booking/{{ booking.booking_id }}"
-                           class="book-btn"
-                           onclick="return confirm('Are you sure you want to cancel this booking?')">
+                        <span class="status confirmed">
+                            Confirmed
+                        </span>
 
-                            Cancel Booking
+                    {% elif booking.status == "Cancelled" %}
 
-                        </a>
+                        <span class="status cancelled">
+                            Cancelled
+                        </span>
+
+                    {% else %}
+
+                        <span class="status pending">
+                            {{ booking.status }}
+                        </span>
 
                     {% endif %}
 
-                </div>
+                </span>
+            </div>
 
-            {% endfor %}
+
+            <!-- Action -->
+            <div class="booking-item">
+
+                <span class="label">
+                    Action
+                </span>
+
+                {% if booking.status == "Confirmed" %}
+
+                    <a
+                        href="/cancel-booking/{{ booking.booking_id }}"
+                        class="cancel-btn"
+                        onclick="return confirm('Are you sure you want to cancel this booking?');">
+                        Cancel Booking
+                    </a>
+
+                {% else %}
+
+                    <span class="cancel-btn disabled">
+                        No Action
+                    </span>
+
+                {% endif %}
+
+            </div>
 
         </div>
 
+        {% endfor %}
+
     {% else %}
 
-        <div class="form-box"
-             style="margin: 30px auto;">
-
-            <div class="room-icon">
-                🛏️
-            </div>
+        <!-- No Bookings -->
+        <div class="no-bookings">
 
             <h2>
                 No Bookings Found
             </h2>
 
             <p>
-                You have not made any bookings yet.
+                You have not made any room reservations yet.
             </p>
 
-            <a href="/rooms" class="book-btn">
-                Browse Rooms
+            <a href="/rooms" class="rooms-btn">
+                Browse Available Rooms
             </a>
 
         </div>
 
     {% endif %}
 
-</section>
+</div>
 
-
-<!-- ================= FOOTER ================= -->
-
-<footer>
-
-    <p>
-        © 2026 Grand Stay Hotel |
-        Online Hotel Management System
-    </p>
-
-</footer>
 
 </body>
-
 </html>
