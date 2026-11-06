@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Rooms | Grand Stay Hotel</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🏨 Grand Stay
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/rooms">
+            Rooms
+        </a>
+
+        <a href="/bookings">
+            My Bookings
+        </a>
+
+        {% if session.get("customer_id") %}
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        {% else %}
+
+            <a href="/login">
+                Login
+            </a>
+
+            <a href="/register">
+                Register
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<!-- ================= ROOMS SECTION ================= -->
+
+<section class="rooms-section">
+
+    <h1>
+        Our Rooms
+    </h1>
+
+    <p class="rooms-subtitle">
+        Choose a room that suits your comfort and budget.
+    </p>
+
+
+    {% if rooms %}
+
+    <div class="room-container">
+
+
+        {% for room in rooms %}
+
+
+        <!-- ================= ROOM CARD ================= -->
+
+        <div class="room-card">
+
+
+            <div class="room-icon">
+
+                {% if room.room_type == "Single" %}
+
+                    🛏️
+
+                {% elif room.room_type == "Double" %}
+
+                    🛌
+
+                {% elif room.room_type == "Deluxe" %}
+
+                    🏨
+
+                {% elif room.room_type == "Suite" %}
+
+                    👑
+
+                {% else %}
+
+                    🏠
+
+                {% endif %}
+
+            </div>
+
+
+            <h2>
+                Room {{ room.room_number }}
+            </h2>
+
+
+            <p>
+                <strong>Room Type:</strong>
+                {{ room.room_type }}
+            </p>
+
+
+            <p>
+                <strong>Capacity:</strong>
+                {{ room.capacity }} Guest(s)
+            </p>
+
+
+            <p class="price">
+
+                ₹{{ room.price }}
+
+                <span>
+                    / night
+                </span>
+
+            </p>
+
+
+            {% if room.status == "Available" %}
+
+                <p class="status">
+                    ✓ Available
+                </p>
+
+                <a href="/booking/{{ room.room_id }}"
+                   class="book-btn">
+
+                    Book Now
+
+                </a>
+
+            {% else %}
+
+                <p class="status"
+                   style="color: red;">
+
+                    ✗ {{ room.status }}
+
+                </p>
+
+                <button class="book-btn disabled"
+                        disabled>
+
+                    Not Available
+
+                </button>
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- ================= NO ROOMS ================= -->
+
+    <div class="form-box"
+         style="margin: 30px auto;">
+
+        <div class="room-icon">
+            🏨
+        </div>
+
+        <h2>
+            No Rooms Available
+        </h2>
+
+        <p>
+            Currently there are no rooms available.
+        </p>
+
+        <a href="/"
+           class="book-btn">
+
+            Back to Home
+
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 Grand Stay Hotel |
+        Online Hotel Management System
+    </p>
+
+</footer>
+
+
+</body>
+
+</html>

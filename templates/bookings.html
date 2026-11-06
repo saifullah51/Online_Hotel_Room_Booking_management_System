@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Bookings | Grand Stay Hotel</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🏨 Grand Stay
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/rooms">Rooms</a>
+
+        <a href="/bookings">My Bookings</a>
+
+        <a href="/logout">Logout</a>
+
+    </div>
+
+</nav>
+
+
+<!-- ================= MY BOOKINGS ================= -->
+
+<section class="rooms-section">
+
+    <h1>
+        My Bookings
+    </h1>
+
+    <p class="rooms-subtitle">
+        View your hotel reservations
+    </p>
+
+
+    {% if bookings %}
+
+        <div class="room-container">
+
+            {% for booking in bookings %}
+
+                <div class="room-card">
+
+                    <div class="room-icon">
+                        🏨
+                    </div>
+
+                    <h2>
+                        Room {{ booking.room_number }}
+                    </h2>
+
+                    <p>
+                        <strong>Booking ID:</strong>
+                        {{ booking.booking_id }}
+                    </p>
+
+                    <p>
+                        <strong>Room Type:</strong>
+                        {{ booking.room_type }}
+                    </p>
+
+                    <p>
+                        <strong>Check-in:</strong>
+                        {{ booking.check_in }}
+                    </p>
+
+                    <p>
+                        <strong>Check-out:</strong>
+                        {{ booking.check_out }}
+                    </p>
+
+                    <p>
+                        <strong>Total Amount:</strong>
+                        ₹{{ booking.total_amount }}
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+
+                        {% if booking.status == "Confirmed" %}
+
+                            <span style="color: green; font-weight: bold;">
+                                ✓ Confirmed
+                            </span>
+
+                        {% elif booking.status == "Cancelled" %}
+
+                            <span style="color: red; font-weight: bold;">
+                                ✗ Cancelled
+                            </span>
+
+                        {% else %}
+
+                            {{ booking.status }}
+
+                        {% endif %}
+
+                    </p>
+
+
+                    {% if booking.status == "Confirmed" %}
+
+                        <a href="/cancel-booking/{{ booking.booking_id }}"
+                           class="book-btn"
+                           onclick="return confirm('Are you sure you want to cancel this booking?')">
+
+                            Cancel Booking
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="form-box"
+             style="margin: 30px auto;">
+
+            <div class="room-icon">
+                🛏️
+            </div>
+
+            <h2>
+                No Bookings Found
+            </h2>
+
+            <p>
+                You have not made any bookings yet.
+            </p>
+
+            <a href="/rooms" class="book-btn">
+                Browse Rooms
+            </a>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 Grand Stay Hotel |
+        Online Hotel Management System
+    </p>
+
+</footer>
+
+</body>
+
+</html>

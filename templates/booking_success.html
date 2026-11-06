@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Booking Successful | Grand Stay Hotel</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🏨 Grand Stay
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/rooms">Rooms</a>
+
+        {% if session.get("customer_id") %}
+            <a href="/logout">Logout</a>
+        {% else %}
+            <a href="/login">Login</a>
+        {% endif %}
+    </div>
+
+</nav>
+
+
+<div class="form-container">
+
+    <div class="form-box">
+
+        <div class="room-icon">
+            ✅
+        </div>
+
+        <h1>Booking Successful!</h1>
+
+        <p>
+            Your room has been booked successfully.
+        </p>
+
+        <div class="booking-info">
+
+            <p>
+                <strong>Booking ID:</strong>
+                {{ booking_id }}
+            </p>
+
+            <p>
+                <strong>Room Number:</strong>
+                {{ room.room_number }}
+            </p>
+
+            <p>
+                <strong>Room Type:</strong>
+                {{ room.room_type }}
+            </p>
+
+            <p>
+                <strong>Check-in:</strong>
+                {{ check_in }}
+            </p>
+
+            <p>
+                <strong>Check-out:</strong>
+                {{ check_out }}
+            </p>
+
+            <p>
+                <strong>Total Amount:</strong>
+                ₹{{ total_amount }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+                Confirmed
+            </p>
+
+        </div>
+
+        <a href="/rooms" class="book-btn">
+            Back to Rooms
+        </a>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <p>
+        © 2026 Grand Stay Hotel | Online Hotel Management System
+    </p>
+</footer>
+
+</body>
+</html>

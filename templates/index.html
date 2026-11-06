@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Grand Stay Hotel | Home</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🏨 Grand Stay
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">Home</a>
+
+        <a href="/rooms">Rooms</a>
+
+        <a href="/bookings">My Bookings</a>
+
+        {% if session.get("customer_id") %}
+
+            <a href="/logout">Logout</a>
+
+        {% else %}
+
+            <a href="/login">Login</a>
+
+            <a href="/register">Register</a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<!-- ================= HERO SECTION ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Welcome to Grand Stay Hotel
+        </h1>
+
+        <p>
+            Experience comfort, luxury and unforgettable hospitality.
+        </p>
+
+        <a href="/rooms" class="hero-btn">
+            Explore Rooms
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <h2>
+        Why Choose Grand Stay?
+    </h2>
+
+    <p class="section-subtitle">
+        Everything you need for a comfortable and memorable stay.
+    </p>
+
+
+    <div class="feature-container">
+
+
+        <!-- Feature 1 -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🛏️
+            </div>
+
+            <h3>
+                Comfortable Rooms
+            </h3>
+
+            <p>
+                Enjoy clean, comfortable and well-equipped rooms
+                designed for a relaxing stay.
+            </p>
+
+        </div>
+
+
+        <!-- Feature 2 -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                🔒
+            </div>
+
+            <h3>
+                Easy & Secure Booking
+            </h3>
+
+            <p>
+                Book your preferred room easily through our
+                online hotel management system.
+            </p>
+
+        </div>
+
+
+        <!-- Feature 3 -->
+
+        <div class="feature-card">
+
+            <div class="feature-icon">
+                ⭐
+            </div>
+
+            <h3>
+                Quality Service
+            </h3>
+
+            <p>
+                We provide excellent hospitality and services
+                to make your stay enjoyable.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section class="about">
+
+    <div class="about-content">
+
+        <h2>
+            Your Comfort Is Our Priority
+        </h2>
+
+        <p>
+            Grand Stay Hotel provides a simple and convenient
+            online platform to view available rooms, register
+            as a customer and book hotel rooms.
+        </p>
+
+        <p>
+            Whether you are travelling for business or leisure,
+            we are here to provide a comfortable stay.
+        </p>
+
+        <a href="/rooms" class="book-btn">
+            View Available Rooms
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    <p>
+        © 2026 Grand Stay Hotel |
+        Online Hotel Management System
+    </p>
+
+</footer>
+
+
+</body>
+</html>

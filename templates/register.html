@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | Grand Stay Hotel</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        🏨 Grand Stay
+    </div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/rooms">Rooms</a>
+        <a href="/register">Register</a>
+        <a href="/login">Login</a>
+    </div>
+
+</nav>
+
+
+<div class="form-container">
+
+    <div class="form-box">
+
+        <h1>Create Account</h1>
+
+        <p>Register to book your hotel room.</p>
+
+        <form method="POST">
+
+            <label>Full Name</label>
+            <input
+                type="text"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+
+            <label>Email</label>
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+            <label>Phone</label>
+            <input
+                type="text"
+                name="phone"
+                placeholder="Enter phone number"
+                required
+            >
+
+            <label>Password</label>
+            <input
+                type="password"
+                name="password"
+                placeholder="Create a password"
+                required
+            >
+
+            <button type="submit" class="submit-btn">
+                Register
+            </button>
+
+        </form>
+
+        <p class="login-text">
+            Already have an account?
+            <a href="/login">Login here</a>
+        </p>
+
+    </div>
+
+</div>
+
+
+<footer>
+    <p>
+        © 2026 Grand Stay Hotel | Online Hotel Management System
+    </p>
+</footer>
+
+</body>
+</html>
